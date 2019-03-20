@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>battleshipV.2</title>
+    <style>
+        body {
+            background-color: darkgray;        
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+        #gameboard {
+            width: 600px;
+            height: 600px;
+            border: 2px solid red;
+        }
+        .tile {
+            float: left;
+            width: calc(100%/3);
+            height:calc(100%/3);
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Battleship</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-7">
+                <div id="gameboard">
+                    <div class="tile" data-x="1" data-y="1" onclick="play()">1</div>
+                    <div class="tile" data-x="2" data-y="1" onclick="play()">2</div>
+                    <div class="tile" data-x="3" data-y="1" onclick="play()">3</div>
+                    <div class="tile" data-x="1" data-y="2" onclick="play()">4</div>
+                    <div class="tile" data-x="2" data-y="2" onclick="play()">5</div>
+                    <div class="tile" data-x="3" data-y="2" onclick="play()">6</div>
+                    <div class="tile" data-x="1" data-y="3" onclick="play()">7</div>
+                    <div class="tile" data-x="2" data-y="3" onclick="play()">8</div>
+                    <div class="tile" data-x="3" data-y="3" onclick="play()">9</div>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <button onclick="setPlayer1()">Set Player 1</button>
+                <button onclick
+            </div>
+        </div>
+    </div>
+    
+    
+
+    <script>
+        var turn = true; // player1 === true, player2 === false
+        var player1 = {
+            x:1,
+            y:1
+        }
+        var player2 = {
+            x:randomNumber(),
+            y:randomNumber()
+        }
+        var gameOver = false;
+
+        function play(objXY) {
+            var output = document.getElementById("output");
+
+            if (gameOver) {
+                return;
+            }
+            var hitTarget = false;
+            var player = "";
+            //code here did i hit player2
+
+            if (turn) {
+                turn = false;
+                hitTarget = checkForHit(objXY, player2);
+                player = "Player 1";
+            } else {
+                turn = true;
+                shot = {
+                    x:randomNumber(),
+                    y:randomNumber()
+                }  // did the computer hit me
+                hitTarget = checkForHit(shot, player1);
+                console.log(shot);
+                player = "Player 2"
+
+            }
+
+            if (hitTarget) { //true or false
+                output.textContent = ("you win" + player + "!");
+            } else{
+                output.textContent = ("you missed" + player + "!");
+
+                if (!turn) {
+                    event.target.className += "miss";
+                    setTimeout(function() {
+                        output.textContent = "player2 is firing!";
+                        play();
+                    }, 1000);
+                },1000);
+            }
+
+            function setPlayer1() {
+                var tiles = document.querySelectorAll(".tile");
+                var confirm = document.getElementById("confirm");
+                var output = document.getElementById("output");
+
+                confirm.className = "";
+                output.textContent = "please choose a starting square then clack click 'please start the battle'"
+
+                tiles.forEach(function(tile){
+                    tile.addEventListener("click", setPlayer1Location);
+                });
+            }
+
+            function setPlayer1Location() {
+                //if (event.target.className === "tile") {
+                  //  event.target.className
+                //} else {
+                    
+                //}
+                //event.target.className += " battleship";
+                var battleship = document.querySelector(".battleship");
+                if (battleship) {
+                    battleship.className = "tile";
+                }
+                battle.className = "tile";
+                event.target.className += " battleship"; 
+                player1 = {
+                    x: Number(event.target.dataset.x),
+                    y: Number(event.target.dataset.y)
+                }
+            }
+            
+            function confirmPlayer1() {
+                var tiles = document.querySelectorAll(".tiles");
+                tiles.forEach(function(tile){
+                    tile.removeEventListener("click", setPlayer1Location);
+                    tile.addEventListener("click", play);
+                });
+            }
+
+
+
+
+            function randomNumber() {
+                return Math.ceil(Math.random()*3);
+            }
+        }
+        function checkForHit(shot, player) { // 
+            for (var coord in shot) {
+                var coord1 = shot[coord];
+                var coord2 = player[coord];
+                if (coord1 !== coord2) {
+                    return false;
+                }    
+            }
+            return true;
+        }
+    </script>
+    
+</body>
+</html>
